@@ -1,0 +1,97 @@
+{{#if block.isCached}}
+<i class="cached">(Entity is Cached)</i>
+        {{/if}}
+
+<div class="arinfosect">
+<i class="fa fa-user"></i> <span>Organization Information</span> <a href="{{block.data.details.orgRef}}"> (View Org Info) </a>
+</div>
+
+
+<div class="arinfo">
+{{#if block.data.details.orgHandle}}
+<span class="arinfolabel"> Handle: </span>
+<b>{{block.data.details.orgHandle}}</b>
+{{/if}}
+</div>
+
+<div class="arinformation">
+{{#if block.data.details.orgName}}
+<span class="arinfolabel"> Name: </span>
+<b>{{block.data.details.orgName}}</b>
+{{/if}}
+</div>
+
+<div class="arinfosect">
+<i class="fa fa-info"></i> <span>Network Block</span> <a href="{{block.data.details.netBlockRef}}"> (View Network Info) </a>
+</div>
+
+<div class="arinfo">
+{{#if block.data.details.netBlockHandle}}
+<span class="arinfolabel"> Handle: </span>
+<b>{{block.data.details.netBlockHandle}}</b>
+{{/if}}
+</div>
+
+<div class="arinfo">
+{{#if block.data.details.netBlockName}}
+<span class="arinfolabel"> Name: </span>
+<b>{{block.data.details.netBlockName}}</b>
+{{/if}}
+</div>
+
+<div class="arinfo">
+{{#if block.data.details.netBlockCIDR}}
+<span class="arinfolabel"> CIDR: </span>
+<b>{{block.data.details.netBlockCIDR}}</b>
+{{/if}}
+</div>
+
+<div class="arinfo">
+{{#if block.data.details.startAddr}}
+<span class="arinfolabel"> Start Address: </span>
+{{block.data.details.startAddr}}
+{{/if}}
+</div>
+
+<div class="arinfo">
+{{#if block.data.details.endAddr}}
+<span class="arinfolabel"> End Address: </span>
+<b>{{block.data.details.endAddr}}</b>
+{{/if}}
+</div>
+
+<div class="arinfo">
+{{#if block.data.details.regDate}}
+<span class="arinfolabel"> Registration Date: </span>
+<b>{{block.data.details.regDate}}</b>
+{{/if}}
+</div>
+
+<div class="arinformation">
+{{#if block.data.details.upDate}}
+<span class="arinfolabel"> Last Update Date: </span>
+<b>{{block.data.details.upDate}}</b>
+{{/if}}
+</div>
+
+
+
+<div class="arinfosect">
+<i class="fa fa-globe"></i> <span> Parent Network Details </span> <a href="{{block.data.details.parentRef}}"> (View Parent Info) </a>
+</div>
+
+<div class="arinfo">
+{{#if block.data.details.parentHandle}}
+<span class="arinfolabel"> Parent Net Handle: </span>
+<b>{{block.data.details.parentHandle}}</b>
+{{/if}}
+</div>
+
+<div class="arinfo">
+{{#if block.data.details.parentName}}
+<span class="arinfolabel"> Parent Net Name: </span>
+<b>{{block.data.details.parentName}}</b>
+{{/if}}
+</div>
+
+
