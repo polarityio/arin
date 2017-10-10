@@ -1,7 +1,7 @@
 module.exports = {
     "name": "American Registry for Internet Numbers",
     "acronym":"ARIN",
-    "logging": { level: 'debug'},
+    "logging": { level: 'info'},
     "entityTypes": ['IPv4', 'IPv6'],
     //Custom CIDR Check; Should Match MM Check / Verify
 	"customTypes":[
