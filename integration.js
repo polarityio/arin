@@ -116,6 +116,7 @@ function _lookupEntity(entityObj, options, cb) {
                 } catch(e) {
                     cb({entity: entityObj, data: null}); //Cache the missed results
                     log.trace({error: e}, "Printing out the results of Body "); // ARIN response not JSON
+                    return;
                 }
             }
 
