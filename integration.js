@@ -34,7 +34,6 @@ function doLookup(entities, options, cb) {
                 }
             });
         } else {
-            lookupResults.push({entity: entityObj, data: null}); //Cache the missed results
             next(null);
         }
     }, function (err) {
@@ -56,7 +55,7 @@ function _lookupEntity(entityObj, options, cb) {
 
         //Debug check for API endpoint URI  assignment
 
-        log.debug({arinuri: arinuri}, "What is the ARIN API enpoint");
+        log.trace({arinuri: arinuri}, "What is the ARIN API enpoint");
 
         request({
             uri: 'http://whois.arin.net/rest/' + arinuri + '/' + entityObj.value,
@@ -80,13 +79,14 @@ function _lookupEntity(entityObj, options, cb) {
             }
 
             if (response.statusCode === 404) {
-                cb(_createJsonErrorPayload("No information available for request", null, '404', '2A', 'No Information', {
-                    err: err
-                }));
+                cb({entity: entityObj, data: null}); //Cache the missed results
                 return;
             }
 
             if (response.statusCode === 400) {
+                cb(_createJsonErrorPayload("Bad Request", null, '400', '2A', 'Bad Request', {
+                    err: err
+                }));
                 return;
             }
 
@@ -98,12 +98,12 @@ function _lookupEntity(entityObj, options, cb) {
                 });
                 return;
             }
-            log.debug({netblock: _.isArray(body.net.netBlocks)}, "Checking to see if the value is true or false");
-            log.debug({body: body}, "Printing out the results of Body ");
+            log.trace({netblock: _.isArray(body.net.netBlocks)}, "Checking to see if the value is true or false");
+            log.trace({body: body}, "Printing out the results of Body ");
 
 
             if(_.isNil(body) || _.isNil(body.net) || _.isNil(body.net.parentNetRef) || _.isNil(body.net.orgRef)){
-
+                cb({entity: entityObj, data: null}); //Cache the missed results
                 return;
             }
 
@@ -114,7 +114,8 @@ function _lookupEntity(entityObj, options, cb) {
                 try {
                     JSON.parse(body);// testing for valid json
                 } catch(e) {
-                    log.debug({error: e}, "Printing out the results of Body "); // ARIN response not JSON
+                    cb({entity: entityObj, data: null}); //Cache the missed results
+                    log.trace({error: e}, "Printing out the results of Body "); // ARIN response not JSON
                 }
             }
 
