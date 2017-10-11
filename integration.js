@@ -109,15 +109,13 @@ function _lookupEntity(entityObj, options, cb) {
 
             log.debug({body: body}, "Printing out the results of Body 22");
 
-
-            if(response) {
-                try {
-                    JSON.parse(body);// testing for valid json
-                } catch(e) {
-                    cb({entity: entityObj, data: null}); //Cache the missed results
-                    log.trace({error: e}, "Printing out the results of Body "); // ARIN response not JSON
-                    return;
-                }
+            // If ARIN returns malformed JSON then the `body` object will be a string.  If it's
+            // valid JSON that we are expecting then it will be an object.  See why body will be a
+            // string on JSON parse error in this issue: https://github.com/request/request/issues/440
+            if (response && typeof body === 'string') {
+                cb(null, {entity: entityObj, data: null}); //Cache the missed results
+                log.trace({error: e}, "Result is not JSON"); // ARIN response not JSON
+                return;
             }
 
             log.debug({body: body}, "Printing out the results of Body ");
