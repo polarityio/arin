@@ -79,7 +79,7 @@ function _lookupEntity(entityObj, options, cb) {
             }
 
             if (response.statusCode === 404) {
-                cb({entity: entityObj, data: null}); //Cache the missed results
+                cb(null, {entity: entityObj, data: null}); //Cache the missed results
                 return;
             }
 
