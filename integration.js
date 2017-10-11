@@ -103,7 +103,7 @@ function _lookupEntity(entityObj, options, cb) {
 
 
             if(_.isNil(body) || _.isNil(body.net) || _.isNil(body.net.parentNetRef) || _.isNil(body.net.orgRef)){
-                cb({entity: entityObj, data: null}); //Cache the missed results
+                cb(null, {entity: entityObj, data: null}); //Cache the missed results
                 return;
             }
 
