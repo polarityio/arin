@@ -2,21 +2,17 @@
 
 let request = require('request');
 let _ = require('lodash');
-let util = require('util');
 let async = require('async');
 let log = null;
-var arinuri = '';
+let arinuri = '';
 
 function startup(logger) {
     log = logger;
 }
 
 function doLookup(entities, options, cb) {
-
     let blacklist = options.blacklist;
-
     let checkv6 = options.lookupIPv6;
-
     let lookupResults = [];
 
     async.each(entities, function (entityObj, next) {
@@ -54,8 +50,7 @@ function _lookupEntity(entityObj, options, cb) {
         }
 
         //Debug check for API endpoint URI  assignment
-
-        log.trace({arinuri: arinuri}, "What is the ARIN API enpoint");
+        log.trace({arinuri: arinuri}, "What is the ARIN API endpoint");
 
         request({
             uri: 'http://whois.arin.net/rest/' + arinuri + '/' + entityObj.value,
@@ -98,9 +93,8 @@ function _lookupEntity(entityObj, options, cb) {
                 });
                 return;
             }
-            log.trace({netblock: _.isArray(body.net.netBlocks)}, "Checking to see if the value is true or false");
-            log.trace({body: body}, "Printing out the results of Body ");
 
+            log.trace({body: body}, "Printing out the results of Body ");
 
             if (_.isNil(body) || _.isNil(body.net) || _.isNil(body.net.parentNetRef) || _.isNil(body.net.orgRef)) {
                 cb(null, {entity: entityObj, data: null}); //Cache the missed results
@@ -121,74 +115,46 @@ function _lookupEntity(entityObj, options, cb) {
             log.debug({body: body}, "Printing out the results of Body ");
 
 
-            if (_.isArray(body.net.netBlocks.netBlock) == true) {
-                // The lookup results returned is an array of lookup objects with the following format
-                cb(null, {
-                    // Required: This is the entity object passed into the integration doLookup method
-                    entity: entityObj,
-                    // Required: An object containing everything you want passed to the template
-                    data: {
-                        // Required: this is the string value that is displayed in the template
-                        entity_name: entityObj.value,
-                        // Required: These are the tags that are displayed in your template
-                        summary: [body.net.orgRef['@name']],
-                        // Data that you want to pass back to the notification window details block
-                        details: {
-                            allData: body,
-                            //Organization
-                            orgHandle: body.net.orgRef['@handle'],
-                            orgName: body.net.orgRef['@name'],
-                            orgRef: body.net.orgRef['$'],
-                            //Network Details
-                            netBlockHandle: body.net.handle['$'],
-                            netBlockName: body.net.name['$'],
-                            netBlockCIDR: body.net.startAddress['$'] + '/' + body.net.netBlocks.netBlock[0].cidrLength['$'],
-                            startAddr: body.net.startAddress['$'],
-                            endAddr: body.net.endAddress['$'],
-                            netBlockRef: body.net.ref['$'],
-                            regDate: body.net.registrationDate['$'],
-                            upDate: body.net.updateDate['$'],
-                            //Parent Network
-                            parentHandle: body.net.parentNetRef['@handle'],
-                            parentName: body.net.parentNetRef['@name'],
-                            parentRef: body.net.parentNetRef['$']
-                        }
-                    }
-                });
-            } else {
-                cb(null, {
-                    // Required: This is the entity object passed into the integration doLookup method
-                    entity: entityObj,
-                    // Required: An object containing everything you want passed to the template
-                    data: {
-                        // Required: this is the string value that is displayed in the template
-                        entity_name: entityObj.value,
-                        // Required: These are the tags that are displayed in your template
-                        summary: [body.net.orgRef['@name']],
-                        // Data that you want to pass back to the notification window details block
-                        details: {
-                            allData: body,
-                            //Organization
-                            orgHandle: body.net.orgRef['@handle'],
-                            orgName: body.net.orgRef['@name'],
-                            orgRef: body.net.orgRef['$'],
-                            //Network Details
-                            netBlockHandle: body.net.handle['$'],
-                            netBlockName: body.net.name['$'],
-                            netBlockCIDR: body.net.startAddress['$'] + '/' + body.net.netBlocks.netBlock.cidrLength['$'],
-                            startAddr: body.net.startAddress['$'],
-                            endAddr: body.net.endAddress['$'],
-                            netBlockRef: body.net.ref['$'],
-                            regDate: body.net.registrationDate['$'],
-                            upDate: body.net.updateDate['$'],
-                            //Parent Network
-                            parentHandle: body.net.parentNetRef['@handle'],
-                            parentName: body.net.parentNetRef['@name'],
-                            parentRef: body.net.parentNetRef['$']
-                        }
-                    }
-                });
+            let cidrLength;
+            if(Array.isArray(body.net.netBlocks.netBlock)){
+                cidrLength = body.net.netBlocks.netBlock[0].cidrLength;
+            }else{
+                cidrLength = body.net.netBlocks.netBlock.cidrLength;
             }
+
+            // The lookup results returned is an array of lookup objects with the following format
+            cb(null, {
+                // Required: This is the entity object passed into the integration doLookup method
+                entity: entityObj,
+                // Required: An object containing everything you want passed to the template
+                data: {
+                    // Required: this is the string value that is displayed in the template
+                    entity_name: entityObj.value,
+                    // Required: These are the tags that are displayed in your template
+                    summary: [body.net.orgRef['@name']],
+                    // Data that you want to pass back to the notification window details block
+                    details: {
+                        allData: body,
+                        //Organization
+                        orgHandle: body.net.orgRef['@handle'],
+                        orgName: body.net.orgRef['@name'],
+                        orgRef: body.net.orgRef['$'],
+                        //Network Details
+                        netBlockHandle: body.net.handle['$'],
+                        netBlockName: body.net.name['$'],
+                        netBlockCIDR: body.net.startAddress['$'] + '/' + cidrLength['$'],
+                        startAddr: body.net.startAddress['$'],
+                        endAddr: body.net.endAddress['$'],
+                        netBlockRef: body.net.ref['$'],
+                        regDate: body.net.registrationDate['$'],
+                        upDate: body.net.updateDate['$'],
+                        //Parent Network
+                        parentHandle: body.net.parentNetRef['@handle'],
+                        parentName: body.net.parentNetRef['@name'],
+                        parentRef: body.net.parentNetRef['$']
+                    }
+                }
+            });
         });
 
     }
@@ -196,7 +162,7 @@ function _lookupEntity(entityObj, options, cb) {
 
 function validateOptions(userOptions, cb) {
     let errors = [];
-    //nothig to validate; leaving function for future expantion of integration.
+    //nothing to validate; leaving function for future expansion of integration.
     cb(null, errors);
 }
 
