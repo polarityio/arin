@@ -22,8 +22,8 @@ function doLookup(entities, options, cb) {
     async.each(entities, function (entityObj, next) {
         if (_.includes(blacklist, entityObj.value)) {
             next(null);
-        }
-        else if ((entityObj.isIPv4 && !entityObj.isPrivateIP) || (entityObj.isIPv6 && checkv6 == true) || entityObj.types.indexOf('custom.IPv4CIDR') >= 0) {
+        } else if ((entityObj.isIPv4 && !entityObj.isPrivateIP) || (entityObj.isIPv6 && checkv6 == true)
+            || entityObj.types.indexOf('custom.IPv4CIDR') >= 0) {
             _lookupEntity(entityObj, options, function (err, result) {
                 if (err) {
                     next(err);
@@ -66,7 +66,7 @@ function _lookupEntity(entityObj, options, cb) {
             }
         }, function (err, response, body) {
             if (err) {
-                log.error({err:err}, "Request Error");
+                log.error({err: err}, "Request Error");
                 cb(err);
                 return;
             }
@@ -102,7 +102,7 @@ function _lookupEntity(entityObj, options, cb) {
             log.trace({body: body}, "Printing out the results of Body ");
 
 
-            if(_.isNil(body) || _.isNil(body.net) || _.isNil(body.net.parentNetRef) || _.isNil(body.net.orgRef)){
+            if (_.isNil(body) || _.isNil(body.net) || _.isNil(body.net.parentNetRef) || _.isNil(body.net.orgRef)) {
                 cb(null, {entity: entityObj, data: null}); //Cache the missed results
                 return;
             }
@@ -121,7 +121,7 @@ function _lookupEntity(entityObj, options, cb) {
             log.debug({body: body}, "Printing out the results of Body ");
 
 
-            if(_.isArray(body.net.netBlocks.netBlock) == true) {
+            if (_.isArray(body.net.netBlocks.netBlock) == true) {
                 // The lookup results returned is an array of lookup objects with the following format
                 cb(null, {
                     // Required: This is the entity object passed into the integration doLookup method
@@ -155,7 +155,7 @@ function _lookupEntity(entityObj, options, cb) {
                         }
                     }
                 });
-            }else {
+            } else {
                 cb(null, {
                     // Required: This is the entity object passed into the integration doLookup method
                     entity: entityObj,
@@ -174,17 +174,17 @@ function _lookupEntity(entityObj, options, cb) {
                             orgRef: body.net.orgRef['$'],
                             //Network Details
                             netBlockHandle: body.net.handle['$'],
-                            netBlockName:  body.net.name['$'],
-                            netBlockCIDR: body.net.startAddress['$'] +  '/' + body.net.netBlocks.netBlock.cidrLength['$'],
-                            startAddr:  body.net.startAddress['$'],
-                            endAddr:  body.net.endAddress['$'],
-                            netBlockRef:  body.net.ref['$'],
-                            regDate:  body.net.registrationDate['$'],
-                            upDate:  body.net.updateDate['$'],
+                            netBlockName: body.net.name['$'],
+                            netBlockCIDR: body.net.startAddress['$'] + '/' + body.net.netBlocks.netBlock.cidrLength['$'],
+                            startAddr: body.net.startAddress['$'],
+                            endAddr: body.net.endAddress['$'],
+                            netBlockRef: body.net.ref['$'],
+                            regDate: body.net.registrationDate['$'],
+                            upDate: body.net.updateDate['$'],
                             //Parent Network
-                            parentHandle:  body.net.parentNetRef['@handle'],
-                            parentName:  body.net.parentNetRef['@name'],
-                            parentRef:  body.net.parentNetRef['$']
+                            parentHandle: body.net.parentNetRef['@handle'],
+                            parentName: body.net.parentNetRef['@name'],
+                            parentRef: body.net.parentNetRef['$']
                         }
                     }
                 });
