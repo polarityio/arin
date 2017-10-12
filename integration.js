@@ -3,8 +3,10 @@
 let request = require('request');
 let _ = require('lodash');
 let async = require('async');
+let ip = require('ip');
 let log = null;
 let arinuri = '';
+
 
 function startup(logger) {
     log = logger;
@@ -18,7 +20,7 @@ function doLookup(entities, options, cb) {
     async.each(entities, function (entityObj, next) {
         if (_.includes(blacklist, entityObj.value)) {
             next(null);
-        } else if ((entityObj.isIPv4 && !entityObj.isPrivateIP) || (entityObj.isIPv6 && checkv6 == true)
+        } else if ((entityObj.isIPv4 && !entityObj.isPrivateIP) || (entityObj.isIPv6 && checkv6 == true && ip.isV6Format(entityObj.value))
             || entityObj.types.indexOf('custom.IPv4CIDR') >= 0) {
             _lookupEntity(entityObj, options, function (err, result) {
                 if (err) {
