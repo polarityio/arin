@@ -51,9 +51,9 @@ function _lookupEntity(entityObj, options, cb) {
 
         //Debug check for API endpoint URI  assignment
         log.trace({arinuri: arinuri}, "What is the ARIN API endpoint");
-
+        let uri = 'https://whois.arin.net/rest/' + arinuri + '/' + entityObj.value;
         request({
-            uri: 'http://whois.arin.net/rest/' + arinuri + '/' + entityObj.value,
+            uri: uri,
             method: 'GET',
             json: true,
             headers: {
@@ -80,7 +80,9 @@ function _lookupEntity(entityObj, options, cb) {
 
             if (response.statusCode === 400) {
                 cb(_createJsonErrorPayload("Bad Request", null, '400', '2A', 'Bad Request', {
-                    err: err
+                    uri: uri,
+                    err: err,
+                    response: response
                 }));
                 return;
             }
