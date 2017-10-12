@@ -4,12 +4,12 @@ module.exports = {
     "logging": { level: 'info'},
     "entityTypes": ['IPv4', 'IPv6'],
     //Custom CIDR Check; Should Match MM Check / Verify
-	"customTypes":[
-        {
-            key: 'IPv4CIDR',
-            regex: /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$/
-        }
-    ],
+    // "customTypes":[
+    //     {
+    //         key: 'IPv4CIDR',
+    //         regex: /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/[0-9]|[1-2][0-9]|3[0-2]/
+    //     }
+    // ],
     "description": "ARIN Integration",
     "styles":[
         "./styles/arin.less"

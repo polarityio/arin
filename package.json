@@ -2,11 +2,12 @@
   "main": "./integration.js",
   "name": "ARIN",
   "description": "ARIN Integration",
-  "version": "1.0.1-beta",
+  "version": "1.0.2-beta",
   "private": true,
   "dependencies": {
     "request": "2.83.0",
     "lodash": "4.17.4",
-    "async": "2.5.0"
+    "async": "2.5.0",
+    "ip-address": "5.8.8"
   }
 }
