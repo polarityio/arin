@@ -3,7 +3,7 @@
 let request = require('request');
 let _ = require('lodash');
 let async = require('async');
-let ip = require('ip');
+let { Address6 } = require('ip-address');
 let log = null;
 let arinuri = '';
 
@@ -17,17 +17,18 @@ function doLookup(entities, options, cb) {
     let checkv6 = options.lookupIPv6;
     let lookupResults = [];
 
+    log.trace({entities:entities}, 'Entities');
+
     async.each(entities, function (entityObj, next) {
         if (_.includes(blacklist, entityObj.value)) {
             next(null);
-        } else if ((entityObj.isIPv4 && !entityObj.isPrivateIP) || (entityObj.isIPv6 && checkv6 == true && ip.isV6Format(entityObj.value))
-            || entityObj.types.indexOf('custom.IPv4CIDR') >= 0) {
+        } else if ((entityObj.isIPv4 && !entityObj.isPrivateIP) || (entityObj.isIPv6 && checkv6 === true && new Address6(entityObj.value).isValid()) ||
+            entityObj.types.indexOf('custom.IPv4CIDR') >= 0) {
             _lookupEntity(entityObj, options, function (err, result) {
                 if (err) {
                     next(err);
                 } else {
                     lookupResults.push(result);
-                    log.debug({result: result}, "Result Values:");
                     next(null);
                 }
             });
@@ -35,24 +36,20 @@ function doLookup(entities, options, cb) {
             next(null);
         }
     }, function (err) {
+        log.debug({lookupResults: lookupResults}, "Result Values:");
         cb(err, lookupResults);
     });
 }
 
 
 function _lookupEntity(entityObj, options, cb) {
-    log.debug({entity: entityObj.value}, "What is the entity");
-
     if (entityObj.value) {
-
         if (entityObj.types.indexOf('custom.IPv4CIDR') >= 0) {
             arinuri = 'cidr';
         } else {
             arinuri = 'ip';
         }
 
-        //Debug check for API endpoint URI  assignment
-        log.trace({arinuri: arinuri}, "What is the ARIN API endpoint");
         let uri = 'https://whois.arin.net/rest/' + arinuri + '/' + entityObj.value;
         request({
             uri: uri,
@@ -105,24 +102,19 @@ function _lookupEntity(entityObj, options, cb) {
                 return;
             }
 
-            log.debug({body: body}, "Printing out the results of Body 22");
-
             // If ARIN returns malformed JSON then the `body` object will be a string.  If it's
             // valid JSON that we are expecting then it will be an object.  See why body will be a
             // string on JSON parse error in this issue: https://github.com/request/request/issues/440
             if (response && typeof body === 'string') {
                 cb(null, {entity: entityObj, data: null}); //Cache the missed results
-                log.trace({error: e}, "Result is not JSON"); // ARIN response not JSON
+                log.trace({error: err}, "ARIN Response is not JSON"); // ARIN response not JSON
                 return;
             }
 
-            log.debug({body: body}, "Printing out the results of Body ");
-
-
             let cidrLength;
-            if(Array.isArray(body.net.netBlocks.netBlock)){
+            if (Array.isArray(body.net.netBlocks.netBlock)) {
                 cidrLength = body.net.netBlocks.netBlock[0].cidrLength;
-            }else{
+            } else {
                 cidrLength = body.net.netBlocks.netBlock.cidrLength;
             }
 
