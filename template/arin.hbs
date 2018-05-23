@@ -1,104 +1,105 @@
-{{#if block.isCached}}
-    <i class="cached">(Entity is Cached)</i>
-{{/if}}
+<div class="p-non-exfoliate-outer-padding">
+    {{#if block.isCached}}
+        <i class="cached">(Entity is Cached)</i>
+    {{/if}}
 
-<h1 class="p-title">
+    <h1 class="p-title">
     <span>
         <i class="fa fa-fw fa-sitemap"></i>Organization Information
     </span>
-    <a class="p-link" href="{{details.orgRef}}">(View Org Info)</a>
-</h1>
+        <a class="p-link" href="{{details.orgRef}}">(View Org Info)</a>
+    </h1>
 
-{{#if details.orgHandle}}
-    <div>
-        <span class="p-key">Handle: </span>
-        <span class="p-value">{{details.orgHandle}}</span>
-    </div>
-{{/if}}
+    {{#if details.orgHandle}}
+        <div>
+            <span class="p-key">Handle: </span>
+            <span class="p-value">{{details.orgHandle}}</span>
+        </div>
+    {{/if}}
 
-{{#if details.orgName}}
-    <div>
-        <span class="p-key">Name: </span>
-        <span class="p-value">{{details.orgName}}</span>
-    </div>
-{{/if}}
+    {{#if details.orgName}}
+        <div>
+            <span class="p-key">Name: </span>
+            <span class="p-value">{{details.orgName}}</span>
+        </div>
+    {{/if}}
 
-<h1 class="p-title">
+    <h1 class="p-title">
     <span>
         <i class="fa fa-info"></i> Network Block
     </span>
-    <a class="p-link" href="{{details.netBlockRef}}">(View Network Info)</a>
-</h1>
+        <a class="p-link" href="{{details.netBlockRef}}">(View Network Info)</a>
+    </h1>
 
-{{#if details.netBlockHandle}}
-    <div>
-        <span class="p-key">Handle: </span>
-        <span class="p-value">{{details.netBlockHandle}}</span>
-    </div>
-{{/if}}
+    {{#if details.netBlockHandle}}
+        <div>
+            <span class="p-key">Handle: </span>
+            <span class="p-value">{{details.netBlockHandle}}</span>
+        </div>
+    {{/if}}
 
-{{#if details.netBlockName}}
-    <div>
-        <span class="p-key">Name: </span>
-        <span class="p-value">{{details.netBlockName}}</span>
-    </div>
-{{/if}}
+    {{#if details.netBlockName}}
+        <div>
+            <span class="p-key">Name: </span>
+            <span class="p-value">{{details.netBlockName}}</span>
+        </div>
+    {{/if}}
 
-{{#if details.netBlockCIDR}}
-    <div>
-        <span class="p-key">CIDR: </span>
-        <span class="p-value">{{details.netBlockCIDR}}</span>
-    </div>
-{{/if}}
+    {{#if details.netBlockCIDR}}
+        <div>
+            <span class="p-key">CIDR: </span>
+            <span class="p-value">{{details.netBlockCIDR}}</span>
+        </div>
+    {{/if}}
 
-{{#if details.startAddr}}
-    <div>
-        <span class="p-key">Start Address: </span>
-        <span class="p-value">{{details.startAddr}}</span>
-    </div>
-{{/if}}
+    {{#if details.startAddr}}
+        <div>
+            <span class="p-key">Start Address: </span>
+            <span class="p-value">{{details.startAddr}}</span>
+        </div>
+    {{/if}}
 
-{{#if details.endAddr}}
-    <div>
-        <span class="p-key">End Address: </span>
-        <span class="p-value">{{details.endAddr}}</span>
-    </div>
-{{/if}}
+    {{#if details.endAddr}}
+        <div>
+            <span class="p-key">End Address: </span>
+            <span class="p-value">{{details.endAddr}}</span>
+        </div>
+    {{/if}}
 
-{{#if details.regDate}}
-    <div>
-        <span class="p-key">Registration Date: </span>
-        <span class="p-value">{{details.regDate}}</span>
-    </div>
-{{/if}}
+    {{#if details.regDate}}
+        <div>
+            <span class="p-key">Registration Date: </span>
+            <span class="p-value">{{details.regDate}}</span>
+        </div>
+    {{/if}}
 
-{{#if details.upDate}}
-    <div>
-        <span class="p-key">Last Update Date: </span>
-        <span class="p-value">{{details.upDate}}</span>
-    </div>
-{{/if}}
+    {{#if details.upDate}}
+        <div>
+            <span class="p-key">Last Update Date: </span>
+            <span class="p-value">{{details.upDate}}</span>
+        </div>
+    {{/if}}
 
 
-<h1 class="p-title">
+    <h1 class="p-title">
     <span>
         <i class="fa fa-globe"></i> Parent Network Details
     </span>
-    <a class="p-link" href="{{details.parentRef}}">(View Parent Info)</a>
-</h1>
+        <a class="p-link" href="{{details.parentRef}}">(View Parent Info)</a>
+    </h1>
 
-{{#if details.parentHandle}}
-    <div>
-        <span class="p-key">Parent Net Handle: </span>
-        <span class="p-value">{{details.parentHandle}}</span>
-    </div>
-{{/if}}
+    {{#if details.parentHandle}}
+        <div>
+            <span class="p-key">Parent Net Handle: </span>
+            <span class="p-value">{{details.parentHandle}}</span>
+        </div>
+    {{/if}}
 
-{{#if details.parentName}}
-    <div>
-        <span class="p-key">Parent Net Name: </span>
-        <span class="p-value">{{details.parentName}}</span>
-    </div>
-{{/if}}
-
+    {{#if details.parentName}}
+        <div>
+            <span class="p-key">Parent Net Name: </span>
+            <span class="p-value">{{details.parentName}}</span>
+        </div>
+    {{/if}}
+</div>
 
