@@ -1,97 +1,104 @@
 {{#if block.isCached}}
-<i class="cached">(Entity is Cached)</i>
-        {{/if}}
-
-<div class="arinfosect">
-<i class="fa fa-user"></i> <span>Organization Information</span> <a href="{{block.data.details.orgRef}}"> (View Org Info) </a>
-</div>
-
-
-<div class="arinfo">
-{{#if block.data.details.orgHandle}}
-<span class="arinfolabel"> Handle: </span>
-<b>{{block.data.details.orgHandle}}</b>
+    <i class="cached">(Entity is Cached)</i>
 {{/if}}
-</div>
 
-<div class="arinformation">
-{{#if block.data.details.orgName}}
-<span class="arinfolabel"> Name: </span>
-<b>{{block.data.details.orgName}}</b>
+<h1 class="p-title">
+    <span>
+        <i class="fa fa-fw fa-sitemap"></i>Organization Information
+    </span>
+    <a class="p-link" href="{{details.orgRef}}">(View Org Info)</a>
+</h1>
+
+{{#if details.orgHandle}}
+    <div>
+        <span class="p-key">Handle: </span>
+        <span class="p-value">{{details.orgHandle}}</span>
+    </div>
 {{/if}}
-</div>
 
-<div class="arinfosect">
-<i class="fa fa-info"></i> <span>Network Block</span> <a href="{{block.data.details.netBlockRef}}"> (View Network Info) </a>
-</div>
-
-<div class="arinfo">
-{{#if block.data.details.netBlockHandle}}
-<span class="arinfolabel"> Handle: </span>
-<b>{{block.data.details.netBlockHandle}}</b>
+{{#if details.orgName}}
+    <div>
+        <span class="p-key">Name: </span>
+        <span class="p-value">{{details.orgName}}</span>
+    </div>
 {{/if}}
-</div>
 
-<div class="arinfo">
-{{#if block.data.details.netBlockName}}
-<span class="arinfolabel"> Name: </span>
-<b>{{block.data.details.netBlockName}}</b>
+<h1 class="p-title">
+    <span>
+        <i class="fa fa-info"></i> Network Block
+    </span>
+    <a class="p-link" href="{{details.netBlockRef}}">(View Network Info)</a>
+</h1>
+
+{{#if details.netBlockHandle}}
+    <div>
+        <span class="p-key">Handle: </span>
+        <span class="p-value">{{details.netBlockHandle}}</span>
+    </div>
 {{/if}}
-</div>
 
-<div class="arinfo">
-{{#if block.data.details.netBlockCIDR}}
-<span class="arinfolabel"> CIDR: </span>
-<b>{{block.data.details.netBlockCIDR}}</b>
+{{#if details.netBlockName}}
+    <div>
+        <span class="p-key">Name: </span>
+        <span class="p-value">{{details.netBlockName}}</span>
+    </div>
 {{/if}}
-</div>
 
-<div class="arinfo">
-{{#if block.data.details.startAddr}}
-<span class="arinfolabel"> Start Address: </span>
-{{block.data.details.startAddr}}
+{{#if details.netBlockCIDR}}
+    <div>
+        <span class="p-key">CIDR: </span>
+        <span class="p-value">{{details.netBlockCIDR}}</span>
+    </div>
 {{/if}}
-</div>
 
-<div class="arinfo">
-{{#if block.data.details.endAddr}}
-<span class="arinfolabel"> End Address: </span>
-<b>{{block.data.details.endAddr}}</b>
+{{#if details.startAddr}}
+    <div>
+        <span class="p-key">Start Address: </span>
+        <span class="p-value">{{details.startAddr}}</span>
+    </div>
 {{/if}}
-</div>
 
-<div class="arinfo">
-{{#if block.data.details.regDate}}
-<span class="arinfolabel"> Registration Date: </span>
-<b>{{block.data.details.regDate}}</b>
+{{#if details.endAddr}}
+    <div>
+        <span class="p-key">End Address: </span>
+        <span class="p-value">{{details.endAddr}}</span>
+    </div>
 {{/if}}
-</div>
 
-<div class="arinformation">
-{{#if block.data.details.upDate}}
-<span class="arinfolabel"> Last Update Date: </span>
-<b>{{block.data.details.upDate}}</b>
+{{#if details.regDate}}
+    <div>
+        <span class="p-key">Registration Date: </span>
+        <span class="p-value">{{details.regDate}}</span>
+    </div>
 {{/if}}
-</div>
 
-
-
-<div class="arinfosect">
-<i class="fa fa-globe"></i> <span> Parent Network Details </span> <a href="{{block.data.details.parentRef}}"> (View Parent Info) </a>
-</div>
-
-<div class="arinfo">
-{{#if block.data.details.parentHandle}}
-<span class="arinfolabel"> Parent Net Handle: </span>
-<b>{{block.data.details.parentHandle}}</b>
+{{#if details.upDate}}
+    <div>
+        <span class="p-key">Last Update Date: </span>
+        <span class="p-value">{{details.upDate}}</span>
+    </div>
 {{/if}}
-</div>
 
-<div class="arinfo">
-{{#if block.data.details.parentName}}
-<span class="arinfolabel"> Parent Net Name: </span>
-<b>{{block.data.details.parentName}}</b>
+
+<h1 class="p-title">
+    <span>
+        <i class="fa fa-globe"></i> Parent Network Details
+    </span>
+    <a class="p-link" href="{{details.parentRef}}">(View Parent Info)</a>
+</h1>
+
+{{#if details.parentHandle}}
+    <div>
+        <span class="p-key">Parent Net Handle: </span>
+        <span class="p-value">{{details.parentHandle}}</span>
+    </div>
 {{/if}}
-</div>
+
+{{#if details.parentName}}
+    <div>
+        <span class="p-key">Parent Net Name: </span>
+        <span class="p-value">{{details.parentName}}</span>
+    </div>
+{{/if}}
 
 

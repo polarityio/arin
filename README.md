@@ -12,6 +12,10 @@ ARIN has the ability to provide details on IPv6 addresses in addition to IPv4, c
 
 This is an alternate option that can be used to specify a comma-delimited list of domains that you do not want sent to ARIN.  You can block partial matches on the domain name by providing just the text you want to match on.  For example, if you want to blacklist a whole top level domain such as ".com" you can do so by adding the entry `.com`.  If left blank, no IPs will be blacklisted.
 
+### IP Blacklist Regex
+
+This option allows you to specify a regex to blacklist IPv4 Addresses.  Any IPv4 matching the regex will not be looked up.  If the regex is left blank then no IPv4s will be blacklisted.
+
 ## Installation Instructions
 
 Installation instructions for integrations are provided on the [PolarityIO GitHub Page](https://polarityio.github.io/).

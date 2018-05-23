@@ -1,18 +1,12 @@
 module.exports = {
-    "name": "American Registry for Internet Numbers",
-    "acronym":"ARIN",
-    "logging": { level: 'info'},
+    "name": "American Registry for Internet Numbers (ARIN)",
+    "acronym": "ARIN",
+    "logging": {level: 'info'},
     "entityTypes": ['IPv4', 'IPv6'],
-    //Custom CIDR Check; Should Match MM Check / Verify
-    // "customTypes":[
-    //     {
-    //         key: 'IPv4CIDR',
-    //         regex: /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/[0-9]|[1-2][0-9]|3[0-2]/
-    //     }
-    // ],
     "description": "ARIN Integration",
-    "styles":[
-        "./styles/arin.less"
+    "styles": [
+        "./styles/arin.less",
+        "./styles/exfoliate.less"
     ],
     "block": {
         "component": {
@@ -22,7 +16,30 @@ module.exports = {
             "file": "./template/arin.hbs"
         }
     },
-    "options":[
+    request: {
+        // Provide the path to your certFile. Leave an empty string to ignore this option.
+        // Relative paths are relative to the ARIN integration's root directory
+        cert: '',
+        // Provide the path to your private key. Leave an empty string to ignore this option.
+        // Relative paths are relative to the ARIN integration's root directory
+        key: '',
+        // Provide the key passphrase if required.  Leave an empty string to ignore this option.
+        // Relative paths are relative to the ARIN integration's root directory
+        passphrase: '',
+        // Provide the Certificate Authority. Leave an empty string to ignore this option.
+        // Relative paths are relative to the ARIN integration's root directory
+        ca: '',
+        // An HTTP proxy to be used. Supports proxy Auth with Basic Auth, identical to support for
+        // the url parameter (by embedding the auth info in the uri)
+        proxy: '',
+        /**
+         * If set to false, the integration will ignore SSL errors.  This will allow the integration to connect
+         * to the ARIN servers without valid SSL certificates.  Please note that we do NOT recommending setting this
+         * to false in a production environment.
+         */
+        rejectUnauthorized: true
+    },
+    "options": [
         {
             "key": "lookupIPv6",
             "name": "Lookup IPv6 Addresses",
@@ -33,14 +50,22 @@ module.exports = {
             "adminOnly": false
         },
         {
-            "key"         : "blacklist",
-            "name"        : "Blacklist IPs",
-            "description" : "List of IPs that you never want sent to ARIN.",
-            "default"     : "",
-            "type"        : "text",
-            "userCanEdit" : false,
-            "adminOnly"    : false
+            "key": "blacklist",
+            "name": "Blacklist IPs",
+            "description": "List of IPs that you never want sent to ARIN.",
+            "default": "",
+            "type": "text",
+            "userCanEdit": false,
+            "adminOnly": false
+        },
+        {
+            key: "ipBlacklistRegex",
+            name: "IP Black List Regex",
+            description: "IPs that match the given regex will not be looked up (if blank, no IPs will be black listed)",
+            default: "",
+            type: "text",
+            userCanEdit: false,
+            adminOnly: false
         }
-
     ]
 };
