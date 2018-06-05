@@ -7,7 +7,9 @@
     <span>
         <i class="fa fa-fw fa-sitemap"></i>Organization Information
     </span>
-        <a class="p-link" href="{{details.orgRef}}">(View Org Info)</a>
+        {{#if details.orgRef}}
+            <a class="p-link" href="{{details.orgRef}}">(View Org Info)</a>
+        {{/if}}
     </h1>
 
     {{#if details.orgHandle}}
@@ -24,11 +26,14 @@
         </div>
     {{/if}}
 
+
     <h1 class="p-title">
     <span>
         <i class="fa fa-info"></i> Network Block
     </span>
+    {{#if details.netBlockRef}}
         <a class="p-link" href="{{details.netBlockRef}}">(View Network Info)</a>
+    {{/if}}
     </h1>
 
     {{#if details.netBlockHandle}}
@@ -85,7 +90,9 @@
     <span>
         <i class="fa fa-globe"></i> Parent Network Details
     </span>
-        <a class="p-link" href="{{details.parentRef}}">(View Parent Info)</a>
+        {{#if details.parentRef}}
+            <a class="p-link" href="{{details.parentRef}}">(View Parent Info)</a>
+        {{/if}}
     </h1>
 
     {{#if details.parentHandle}}
