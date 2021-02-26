@@ -10,7 +10,7 @@ let config = require('./config/config');
 let log = null;
 let requestWithDefaults;
 let previousIpRegexAsString = '';
-let ipBlocklistRegex = null;
+let ipBlacklistRegex = null;
 
 const BASE_URI = 'https://whois.arin.net/rest/ip/';
 
@@ -46,16 +46,16 @@ function startup(logger) {
     requestWithDefaults = request.defaults(defaults);
 }
 
-function _setupRegexBlocklists(options) {
-    if (options.ipBlocklistRegex !== previousIpRegexAsString && options.ipBlocklistRegex.length === 0) {
-        log.debug("Removing IP Blocklist Regex Filtering");
+function _setupRegexBlacklists(options) {
+    if (options.ipBlacklistRegex !== previousIpRegexAsString && options.ipBlacklistRegex.length === 0) {
+        log.debug("Removing IP Blacklist Regex Filtering");
         previousIpRegexAsString = '';
-        ipBlocklistRegex = null;
+        ipBlacklistRegex = null;
     } else {
-        if (options.ipBlocklistRegex !== previousIpRegexAsString) {
-            previousIpRegexAsString = options.ipBlocklistRegex;
-            log.debug({ipBlocklistRegex: previousIpRegexAsString}, "Modifying IP Blocklist Regex");
-            ipBlocklistRegex = new RegExp(options.ipBlocklistRegex, 'i');
+        if (options.ipBlacklistRegex !== previousIpRegexAsString) {
+            previousIpRegexAsString = options.ipBlacklistRegex;
+            log.debug({ipBlacklistRegex: previousIpRegexAsString}, "Modifying IP Blacklist Regex");
+            ipBlacklistRegex = new RegExp(options.ipBlacklistRegex, 'i');
         }
     }
 }
@@ -65,7 +65,7 @@ function doLookup(entities, options, cb) {
     let checkv6 = options.lookupIPv6;
     let lookupResults = [];
 
-    _setupRegexBlocklists(options);
+    _setupRegexBlacklists(options);
 
     log.trace({entities: entities}, 'Entities');
 
@@ -73,9 +73,9 @@ function doLookup(entities, options, cb) {
         if (_.includes(blacklist, entityObj.value)) {
             next(null);
         } else if ((entityObj.isIPv4 && !entityObj.isPrivateIP) || (entityObj.isIPv6 && checkv6 === true && new Address6(entityObj.value).isValid())) {
-            if (ipBlocklistRegex !== null) {
-                if (ipBlocklistRegex.test(entityObj.value)) {
-                    log.debug({ip: entityObj.value}, 'Blocked BlockListed IP Lookup');
+            if (ipBlacklistRegex !== null) {
+                if (ipBlacklistRegex.test(entityObj.value)) {
+                    log.debug({ip: entityObj.value}, 'Blocked BlackListed IP Lookup');
                     return next(null);
                 }
             }
