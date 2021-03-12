@@ -51,7 +51,7 @@ module.exports = {
             "adminOnly": false
         },
         {
-            "key": "blacklist",
+            "key": "blocklist",
             "name": "Blocklist IPs",
             "description": "List of IPs that you never want sent to ARIN.",
             "default": "",
@@ -62,7 +62,7 @@ module.exports = {
         {
             key: "ipBlocklistRegex",
             name: "IP Block List Regex",
-            description: "IPs that match the given regex will not be looked up (if blank, no IPs will be black listed)",
+            description: "IPs that match the given regex will not be looked up (if blank, no IPs will be block listed)",
             default: "",
             type: "text",
             userCanEdit: false,

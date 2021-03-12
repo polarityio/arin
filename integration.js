@@ -61,7 +61,7 @@ function _setupRegexBlocklists(options) {
 }
 
 function doLookup(entities, options, cb) {
-    let blacklist = options.blacklist;
+    let blocklist = options.blocklist;
     let checkv6 = options.lookupIPv6;
     let lookupResults = [];
 
@@ -70,7 +70,7 @@ function doLookup(entities, options, cb) {
     log.trace({entities: entities}, 'Entities');
 
     async.each(entities, function (entityObj, next) {
-        if (_.includes(blacklist, entityObj.value)) {
+        if (_.includes(blocklist, entityObj.value)) {
             next(null);
         } else if ((entityObj.isIPv4 && !entityObj.isPrivateIP) || (entityObj.isIPv6 && checkv6 === true && new Address6(entityObj.value).isValid())) {
             if (ipBlocklistRegex !== null) {
