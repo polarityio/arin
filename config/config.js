@@ -4,6 +4,7 @@ module.exports = {
     "logging": {level: 'info'},
     "entityTypes": ['IPv4', 'IPv6'],
     "description": "ARIN Integration",
+    defaultColor: "dark-red",
     "styles": [
         "./styles/arin.less",
         "./styles/exfoliate.less"
@@ -50,8 +51,8 @@ module.exports = {
             "adminOnly": false
         },
         {
-            "key": "blacklist",
-            "name": "Blacklist IPs",
+            "key": "blocklist",
+            "name": "Blocklist IPs",
             "description": "List of IPs that you never want sent to ARIN.",
             "default": "",
             "type": "text",
@@ -59,9 +60,9 @@ module.exports = {
             "adminOnly": false
         },
         {
-            key: "ipBlacklistRegex",
-            name: "IP Black List Regex",
-            description: "IPs that match the given regex will not be looked up (if blank, no IPs will be black listed)",
+            key: "ipBlocklistRegex",
+            name: "IP Block List Regex",
+            description: "IPs that match the given regex will not be looked up (if blank, no IPs will be block listed)",
             default: "",
             type: "text",
             userCanEdit: false,
