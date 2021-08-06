@@ -4,7 +4,7 @@ module.exports = {
   logging: { level: 'info' },
   entityTypes: ['IPv4', 'IPv6'],
   description: 'ARIN Integration',
-  defaultColor: 'dark-red',
+  defaultColor: 'light-gray',
   styles: ['./styles/arin.less'],
   block: {
     component: {
@@ -38,15 +38,6 @@ module.exports = {
     rejectUnauthorized: true
   },
   options: [
-    {
-      key: 'lookupIPv6',
-      name: 'Lookup IPv6 Addresses',
-      description: 'If checked, the integration will IPv6 addresses in addition to IPv4.',
-      default: true,
-      type: 'boolean',
-      userCanEdit: true,
-      adminOnly: false
-    },
     {
       key: 'blocklist',
       name: 'Blocklist IPs',
