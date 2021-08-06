@@ -62,15 +62,11 @@ function _setupRegexBlocklists(options) {
 }
 
 function isValidIpToLookup(entity, options) {
-  const checkv6 = options.lookupIPv6;
   const blocklist = options.blocklist;
 
   if (_.includes(blocklist, entity.value)) {
     return false;
-  } else if (
-    (entity.isIPv4 && !entity.isPrivateIP) ||
-    (entity.isIPv6 && new Address6(entity.value).isValid())
-  ) {
+  } else if ((entity.isIPv4 && !entity.isPrivateIP) || (entity.isIPv6 && new Address6(entity.value).isValid())) {
     if (ipBlocklistRegex !== null) {
       if (ipBlocklistRegex.test(entity.value)) {
         log.debug({ ip: entity.value }, 'Blocked BlockListed IP Lookup');
@@ -103,7 +99,7 @@ function doLookup(entities, options, cb) {
       return cb(err);
     }
     results.forEach((result) => {
-      if(result){
+      if (result) {
         lookupResults.push(result);
       }
     });
@@ -217,7 +213,7 @@ function _processRequest(err, response, body, entityObj, cb) {
         //Parent Network
         parentHandle: _.get(body, 'net.parentNetRef.@handle'),
         parentName: _.get(body, 'net.parentNetRef.@name'),
-        parentRef: _.get(body, 'body.net.parentNetRef.$')
+        parentRef: _.get(body, 'net.parentNetRef.$')
       }
     }
   });
