@@ -6,8 +6,7 @@ module.exports = {
     "description": "ARIN Integration",
     defaultColor: "dark-red",
     "styles": [
-        "./styles/arin.less",
-        "./styles/exfoliate.less"
+        "./styles/arin.less"
     ],
     "block": {
         "component": {
