@@ -13,6 +13,7 @@ let previousIpRegexAsString = '';
 let ipBlocklistRegex = null;
 
 const BASE_URI = 'https://whois.arin.net/rest/ip/';
+const MAX_PARALLEL_LOOKUPS = 5;
 
 function startup(logger) {
   log = logger;
@@ -60,49 +61,54 @@ function _setupRegexBlocklists(options) {
   }
 }
 
+function isValidIpToLookup(entity, options) {
+  const checkv6 = options.lookupIPv6;
+  const blocklist = options.blocklist;
+
+  if (_.includes(blocklist, entity.value)) {
+    return false;
+  } else if (
+    (entity.isIPv4 && !entity.isPrivateIP) ||
+    (entity.isIPv6 && new Address6(entity.value).isValid())
+  ) {
+    if (ipBlocklistRegex !== null) {
+      if (ipBlocklistRegex.test(entity.value)) {
+        log.debug({ ip: entity.value }, 'Blocked BlockListed IP Lookup');
+        return false;
+      }
+    }
+
+    return true;
+  }
+  return false;
+}
+
 function doLookup(entities, options, cb) {
-  let blocklist = options.blocklist;
-  let checkv6 = options.lookupIPv6;
-  let lookupResults = [];
-  const tasks = [];
+  const lookupResults = [];
 
   _setupRegexBlocklists(options);
 
   log.trace({ entities: entities }, 'Entities');
 
-  async.each(
-    entities,
-    function (entityObj, next) {
-      if (_.includes(blocklist, entityObj.value)) {
-        next(null);
-      } else if (
-        (entityObj.isIPv4 && !entityObj.isPrivateIP) ||
-        (entityObj.isIPv6 && checkv6 === true && new Address6(entityObj.value).isValid())
-      ) {
-        if (ipBlocklistRegex !== null) {
-          if (ipBlocklistRegex.test(entityObj.value)) {
-            log.debug({ ip: entityObj.value }, 'Blocked BlockListed IP Lookup');
-            return next(null);
-          }
-        }
-
-        _lookupEntity(entityObj, options, function (err, result) {
-          if (err) {
-            next(err);
-          } else {
-            lookupResults.push(result);
-            next(null);
-          }
-        });
-      } else {
-        next(null);
-      }
-    },
-    function (err) {
-      log.debug({ lookupResults: lookupResults }, 'Result Values:');
-      cb(err, lookupResults);
+  const tasks = entities.map((entity) => (done) => {
+    if (isValidIpToLookup(entity, options)) {
+      _lookupEntity(entity, options, done);
+    } else {
+      done();
     }
-  );
+  });
+
+  async.parallelLimit(tasks, MAX_PARALLEL_LOOKUPS, (err, results) => {
+    if (err) {
+      return cb(err);
+    }
+    results.forEach((result) => {
+      if(result){
+        lookupResults.push(result);
+      }
+    });
+    cb(null, lookupResults);
+  });
 }
 
 function _processRequest(err, response, body, entityObj, cb) {
