@@ -2,8 +2,8 @@
 
 const request = require('request');
 const _ = require('lodash');
-const async = require('async');
 const { Address6 } = require('ip-address');
+const Bottleneck = require('bottleneck');
 const fs = require('fs');
 const config = require('./config/config');
 
@@ -11,9 +11,9 @@ let log = null;
 let requestWithDefaults;
 let previousIpRegexAsString = '';
 let ipBlocklistRegex = null;
+let limiter = null;
 
 const BASE_URI = 'https://whois.arin.net/rest/ip/';
-const MAX_PARALLEL_LOOKUPS = 5;
 
 function startup(logger) {
   log = logger;
@@ -79,39 +79,78 @@ function isValidIpToLookup(entity, options) {
   return false;
 }
 
+function _setupLimiter(options) {
+  limiter = new Bottleneck({
+    maxConcurrent: Number.parseInt(options.maxConcurrent, 10), // no more than 5 lookups can be running at single time
+    highWater: 50, // no more than 50 lookups can be queued up
+    strategy: Bottleneck.strategy.OVERFLOW,
+    minTime: Number.parseInt(options.minTime, 10) // don't run lookups faster than 1 every 200 ms
+  });
+}
+
 function doLookup(entities, options, cb) {
   const lookupResults = [];
+  const errors = [];
+  let hasValidIndicator = false;
+
+  if (limiter === null) {
+    _setupLimiter(options);
+  }
 
   _setupRegexBlocklists(options);
 
-  log.trace({ entities: entities }, 'Entities');
+  //log.trace({ entities: entities }, 'Entities');
 
-  const tasks = entities.map((entity) => (done) => {
+  entities.forEach((entity) => {
     if (isValidIpToLookup(entity, options)) {
-      _lookupEntity(entity, options, done);
-    } else {
-      done();
+      hasValidIndicator = true;
+      limiter.submit(_lookupEntity, entity, options, (err, result) => {
+        const maxRequestQueueLimitHit =
+          (_.isEmpty(err) && _.isEmpty(result)) || (err && err.message === 'This job has been dropped by Bottleneck');
+
+        const isConnectionReset = _.get(err, 'errors[0].meta.err.code', '') === 'ECONNRESET';
+
+        if (maxRequestQueueLimitHit || isConnectionReset) {
+          lookupResults.push({
+            entity,
+            data: {
+              summary: ['Lookup limit reached'],
+              details: {
+                maxRequestQueueLimitHit,
+                isConnectionReset
+              }
+            }
+          });
+        } else if (err) {
+          errors.push(err);
+        } else {
+          lookupResults.push(result);
+        }
+
+        if (lookupResults.length + errors.length === entities.length) {
+          // we got all our results
+          if (errors.length > 0) {
+            cb(errors);
+          } else {
+            cb(null, lookupResults);
+          }
+        }
+      });
     }
   });
 
-  async.parallelLimit(tasks, MAX_PARALLEL_LOOKUPS, (err, results) => {
-    if (err) {
-      return cb(err);
-    }
-    results.forEach((result) => {
-      if (result) {
-        lookupResults.push(result);
-      }
-    });
-    cb(null, lookupResults);
-  });
+  // This can occur if there are no valid entities to lookup so we need a safe guard to make
+  // sure we still call the callback.
+  if (!hasValidIndicator) {
+    cb(null, []);
+  }
 }
 
 function _processRequest(err, response, body, entityObj, cb) {
   if (err) {
     log.error({ err: err }, 'Request Error');
     cb(
-      _createJsonErrorPayload('Failed to complete HTTP Request', null, '500', '2A', 'Unable to Process Request', {
+      _createJsonErrorPayload('Failed to complete HTTP Request', null, 'NA', '2A', 'Unable to Process Request', {
         err: err
       })
     );
@@ -199,7 +238,7 @@ function _processRequest(err, response, body, entityObj, cb) {
         allData: body,
         //Organization
         orgHandle: _.get(body, 'net.orgRef.@handle'),
-        orgName: _.get(body, 'net.orgRef.@name'),
+        orgName: _.get(body, 'net.orgRef.@name', 'No Org Available'),
         orgRef: _.get(body, 'net.orgRef.$'),
         //Network Details
         netBlockHandle: _.get(body, 'net.handle.$'),
@@ -220,6 +259,7 @@ function _processRequest(err, response, body, entityObj, cb) {
 }
 
 function _lookupEntity(entityObj, options, cb) {
+  log.trace('Lookup started on ' + entityObj.value);
   requestWithDefaults(
     {
       uri: BASE_URI + entityObj.value,
@@ -230,6 +270,7 @@ function _lookupEntity(entityObj, options, cb) {
       }
     },
     function (err, response, body) {
+      log.trace('     Lookup finished on ' + entityObj.value);
       _processRequest(err, response, body, entityObj, cb);
     }
   );
@@ -264,8 +305,20 @@ let _createJsonErrorObject = function (msg, pointer, httpCode, code, title, meta
   return error;
 };
 
+function onMessage(payload, options, cb) {
+  doLookup([payload.entity], options, (err, lookupResults) => {
+    if (err) {
+      log.error({ err }, 'Error retrying lookup');
+      cb(err);
+    } else {
+      cb(null, lookupResults[0]);
+    }
+  });
+}
+
 module.exports = {
-  doLookup: doLookup,
-  startup: startup,
-  _processRequest: _processRequest // export for testing purposes
+  doLookup,
+  startup,
+  onMessage,
+  _processRequest // export for testing purposes
 };
