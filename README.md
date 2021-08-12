@@ -2,8 +2,7 @@
 
 The Polarity ARIN integration allows Polarity to search the American Registry of Internet Numbers database to return information about IP addresses.
 
-![image](https://user-images.githubusercontent.com/306319/40402537-4a7ac84c-5e1a-11e8-8aab-2c408078773d.png)
-
+<img src="./assets/overlay.png" width="50%">
 
 ## ARIN Integration Options
 
@@ -18,6 +17,14 @@ This is an alternate option that can be used to specify a comma-delimited list o
 ### IP Blocklist Regex
 
 This option allows you to specify a regex to blocklist IPv4 Addresses.  Any IPv4 matching the regex will not be looked up.  If the regex is left blank then no IPv4s will be blocklisted.
+
+### Max Concurrent Requests
+
+Maximum number of concurrent requests. Integration must be restarted after changing this option. Defaults to 3.
+
+### Minimum Time Between Lookups
+
+Minimum amount of time in milliseconds between lookups (defaults to 250). Integration must be restarted after changing this option. Defaults to 250.
 
 ## Installation Instructions
 
