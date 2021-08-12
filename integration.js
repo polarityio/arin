@@ -91,6 +91,8 @@ function _setupLimiter(options) {
 function doLookup(entities, options, cb) {
   const lookupResults = [];
   const errors = [];
+  let numConnectionResets = 0;
+  let numThrottled = 0;
   let hasValidIndicator = false;
 
   if (limiter === null) {
@@ -111,6 +113,10 @@ function doLookup(entities, options, cb) {
         const isConnectionReset = _.get(err, 'errors[0].meta.err.code', '') === 'ECONNRESET';
 
         if (maxRequestQueueLimitHit || isConnectionReset) {
+          // Tracking for logging purposes
+          if (isConnectionReset) numConnectionResets++;
+          if (maxRequestQueueLimitHit) numThrottled++;
+
           lookupResults.push({
             entity,
             data: {
@@ -128,6 +134,16 @@ function doLookup(entities, options, cb) {
         }
 
         if (lookupResults.length + errors.length === entities.length) {
+          if (numConnectionResets > 0 || numThrottled > 0) {
+            log.warn(
+              {
+                numEntitiesLookedUp: entities.length,
+                numConnectionResets: numConnectionResets,
+                numLookupsThrottled: numThrottled
+              },
+              'Lookup Limit Error'
+            );
+          }
           // we got all our results
           if (errors.length > 0) {
             cb(errors);
