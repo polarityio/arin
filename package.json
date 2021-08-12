@@ -2,13 +2,13 @@
   "main": "./integration.js",
   "name": "ARIN",
   "description": "ARIN Integration",
-  "version": "1.1.4",
+  "version": "3.0.0-beta",
   "private": true,
   "dependencies": {
-    "request": "^2.86",
-    "lodash": "^4.17",
-    "async": "^2.6",
-    "ip-address": "5.8.8"
+    "request": "^2.88.2",
+    "lodash": "^4.17.21",
+    "ip-address": "^8.1.0",
+    "bottleneck": "^2.19.5"
   },
   "devDependencies": {
     "chai": "~4.1",

@@ -1,14 +1,24 @@
-<div class="p-non-exfoliate-outer-padding">
+{{#if errorMessage}}
+<div class="alert alert-danger">
+<pre>{{errorMessage}}</pre>
+</div>
+{{/if}}
+{{#if (or details.isConnectionReset details.maxRequestQueueLimitHit)}}
+    <button type="button" class="btn btn-polarity btn-sm retry-btn"{{action "retryLookup"}}>
+        {{#if running}}
+            {{fa-icon icon="spinner-third" fixedWidth=true spin=true}}
+        {{else}}
+            Retry Lookup
+        {{/if}}
+    </button>
+{{else if details}}
     {{#if block.isCached}}
         <i class="cached">(Entity is Cached)</i>
     {{/if}}
 
-    <h1 class="p-title">
-    <span>
-        <i class="fa fa-fw fa-sitemap"></i>Organization Information
-    </span>
+    <h1 class="p-title">{{fa-icon icon="sitemap" fixedWidth=true}} Organization Information
         {{#if details.orgRef}}
-            <a class="p-link" href="{{details.orgRef}}">(View Org Info)</a>
+            <a class="p-link" href="{{details.orgRef}}">(View Org Info {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}})</a>
         {{/if}}
     </h1>
 
@@ -27,13 +37,10 @@
     {{/if}}
 
 
-    <h1 class="p-title">
-    <span>
-        <i class="fa fa-info"></i> Network Block
-    </span>
-    {{#if details.netBlockRef}}
-        <a class="p-link" href="{{details.netBlockRef}}">(View Network Info)</a>
-    {{/if}}
+    <h1 class="p-title">{{fa-icon icon="cube" fixedWidth=true}} Network Block
+        {{#if details.netBlockRef}}
+            <a class="p-link" href="{{details.netBlockRef}}">(View Network Info {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}})</a>
+        {{/if}}
     </h1>
 
     {{#if details.netBlockHandle}}
@@ -86,12 +93,9 @@
     {{/if}}
 
 
-    <h1 class="p-title">
-    <span>
-        <i class="fa fa-globe"></i> Parent Network Details
-    </span>
+    <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Parent Network Details
         {{#if details.parentRef}}
-            <a class="p-link" href="{{details.parentRef}}">(View Parent Info)</a>
+            <a class="p-link" href="{{details.parentRef}}">(View Parent Info {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}})</a>
         {{/if}}
     </h1>
 
@@ -108,5 +112,7 @@
             <span class="p-value">{{details.parentName}}</span>
         </div>
     {{/if}}
-</div>
+{{else}}
+    No Results
+{{/if}}
 
