@@ -92,12 +92,11 @@
         </div>
     {{/if}}
 
-
-    <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Parent Network Details
-        {{#if details.parentRef}}
+    {{#if details.parentRef}}
+        <h1 class="p-title">{{fa-icon icon="globe" fixedWidth=true}} Parent Network Details
             <a class="p-link" href="{{details.parentRef}}">(View Parent Info {{fa-icon icon="external-link-square" fixedWidth=true class="external-link"}})</a>
-        {{/if}}
-    </h1>
+        </h1>
+    {{/if}}
 
     {{#if details.parentHandle}}
         <div>
