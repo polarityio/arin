@@ -66,7 +66,7 @@ function isValidIpToLookup(entity, options) {
 
   if (_.includes(blocklist, entity.value)) {
     return false;
-  } else if ((entity.isIPv4 && !entity.isPrivateIP) || (entity.isIPv6 && new Address6(entity.value).isValid())) {
+  } else if ((entity.isIPv4 && !entity.isPrivateIP) || (entity.isIPv6 && Address6.isValid(entity.value))) {
     if (ipBlocklistRegex !== null) {
       if (ipBlocklistRegex.test(entity.value)) {
         log.debug({ ip: entity.value }, 'Blocked BlockListed IP Lookup');
