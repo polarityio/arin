@@ -65,6 +65,16 @@ module.exports = {
       adminOnly: false
     },
     {
+      key: 'allRegistries',
+      name: 'Display Regional Registry Ownership Information',
+      description:
+          'If checked, the integration will return a result when the IP address is controlled by one of the non-ARIN regional Internet registries (i.e., RIPE, APNIC, AFRINIC, LACNIC) as well as IANA.  If unchecked, only IP addresses controlled by ARIN will be returned.',
+      default: false,
+      type: 'boolean',
+      userCanEdit: false,
+      adminOnly: false
+    },
+    {
       key: 'maxConcurrent',
       name: 'Max Concurrent Requests',
       description:

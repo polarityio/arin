@@ -18,6 +18,10 @@ This is an alternate option that can be used to specify a comma-delimited list o
 
 This option allows you to specify a regex to blocklist IPv4 Addresses.  Any IPv4 matching the regex will not be looked up.  If the regex is left blank then no IPv4s will be blocklisted.
 
+### Display Regional Registry Ownership Information
+
+If checked, the integration will return a result when the IP address is controlled by one of the non-ARIN regional Internet registries (i.e., RIPE, APNIC, AFRINIC, LACNIC) as well as IANA.  If unchecked, only IP addresses controlled by ARIN will be returned.
+
 ### Max Concurrent Requests
 
 Maximum number of concurrent requests. Integration must be restarted after changing this option. Defaults to 3.

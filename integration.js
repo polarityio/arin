@@ -162,7 +162,7 @@ function doLookup(entities, options, cb) {
   }
 }
 
-function _processRequest(err, response, body, entityObj, cb) {
+function _processRequest(err, response, body, entityObj, options, cb) {
   if (err) {
     log.error({ err: err }, 'Request Error');
     cb(
@@ -219,7 +219,7 @@ function _processRequest(err, response, body, entityObj, cb) {
 
   log.trace({ body: body }, 'Printing out the results of Body ');
 
-  if (_.isNil(body) || _.isNil(body.net) || _.isNil(body.net.parentNetRef) || _.isNil(body.net.orgRef)) {
+  if (_.isNil(body) || _.isNil(body.net) || _.isNil(body.net.orgRef)) {
     cb(null, { entity: entityObj, data: null }); //Cache the missed results
     return;
   }
@@ -230,6 +230,19 @@ function _processRequest(err, response, body, entityObj, cb) {
   if (response && typeof body === 'string') {
     cb(null, { entity: entityObj, data: null }); //Cache the missed results
     log.trace({ error: err }, 'ARIN Response is not JSON'); // ARIN response not JSON
+    return;
+  }
+
+  const orgHandle = _.get(body, 'net.orgRef.@handle');
+  if (
+    !options.allRegistries &&
+    (orgHandle === 'APNIC' ||
+      orgHandle === 'RIPE' ||
+      orgHandle === 'LACNIC' ||
+      orgHandle === 'AFRINIC' ||
+      orgHandle === 'IANA')
+  ) {
+    cb(null, { entity: entityObj, data: null }); // Cache the missed results
     return;
   }
 
@@ -253,7 +266,7 @@ function _processRequest(err, response, body, entityObj, cb) {
       details: {
         allData: body,
         //Organization
-        orgHandle: _.get(body, 'net.orgRef.@handle'),
+        orgHandle,
         orgName: _.get(body, 'net.orgRef.@name', 'No Org Available'),
         orgRef: _.get(body, 'net.orgRef.$'),
         //Network Details
@@ -287,7 +300,7 @@ function _lookupEntity(entityObj, options, cb) {
     },
     function (err, response, body) {
       log.trace('     Lookup finished on ' + entityObj.value);
-      _processRequest(err, response, body, entityObj, cb);
+      _processRequest(err, response, body, entityObj, options, cb);
     }
   );
 }
