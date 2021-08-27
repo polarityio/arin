@@ -8,9 +8,12 @@
         {{#if running}}
             {{fa-icon icon="spinner-third" fixedWidth=true spin=true}}
         {{else}}
-            Retry Lookup
+            Retry Search
         {{/if}}
     </button>
+    <div class="mt-1">
+        <span class="p-footnote">The ARIN API search limit was reached.  You can retry your search by pressing the "Retry Search" button.</span>
+    </div>
 {{else if details}}
     {{#if block.isCached}}
         <i class="cached">(Entity is Cached)</i>
