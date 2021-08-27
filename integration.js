@@ -119,6 +119,7 @@ function doLookup(entities, options, cb) {
 
           lookupResults.push({
             entity,
+            isVolatile: true, // prevent limit reached results from being cached
             data: {
               summary: ['Lookup limit reached'],
               details: {
