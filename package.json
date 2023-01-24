@@ -5,10 +5,10 @@
   "description": "ARIN Integration",
   "private": true,
   "dependencies": {
-    "request": "^2.88.2",
-    "lodash": "^4.17.21",
+    "bottleneck": "^2.19.5",
     "ip-address": "^8.1.0",
-    "bottleneck": "^2.19.5"
+    "lodash": "^4.17.21",
+    "postman-request": "^2.88.1-postman.32"
   },
   "devDependencies": {
     "chai": "~4.1",

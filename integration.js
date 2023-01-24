@@ -1,6 +1,6 @@
 'use strict';
 
-const request = require('request');
+const request = require('postman-request');
 const _ = require('lodash');
 const { Address6 } = require('ip-address');
 const Bottleneck = require('bottleneck');
@@ -15,7 +15,7 @@ let limiter = null;
 
 const BASE_URI = 'https://whois.arin.net/rest/ip/';
 
-function startup(logger) {
+function startup (logger) {
   log = logger;
 
   let defaults = {};
@@ -47,7 +47,7 @@ function startup(logger) {
   requestWithDefaults = request.defaults(defaults);
 }
 
-function _setupRegexBlocklists(options) {
+function _setupRegexBlocklists (options) {
   if (options.ipBlocklistRegex !== previousIpRegexAsString && options.ipBlocklistRegex.length === 0) {
     log.debug('Removing IP Blocklist Regex Filtering');
     previousIpRegexAsString = '';
@@ -61,7 +61,7 @@ function _setupRegexBlocklists(options) {
   }
 }
 
-function isValidIpToLookup(entity, options) {
+function isValidIpToLookup (entity, options) {
   const blocklist = options.blocklist;
 
   if (_.includes(blocklist, entity.value)) {
@@ -79,7 +79,7 @@ function isValidIpToLookup(entity, options) {
   return false;
 }
 
-function _setupLimiter(options) {
+function _setupLimiter (options) {
   limiter = new Bottleneck({
     maxConcurrent: Number.parseInt(options.maxConcurrent, 10), // no more than 5 lookups can be running at single time
     highWater: 50, // no more than 50 lookups can be queued up
@@ -88,7 +88,7 @@ function _setupLimiter(options) {
   });
 }
 
-function doLookup(entities, options, cb) {
+function doLookup (entities, options, cb) {
   const lookupResults = [];
   const errors = [];
   const blockedEntities = [];
@@ -136,7 +136,7 @@ function doLookup(entities, options, cb) {
           lookupResults.push(result);
         }
 
-        if (lookupResults.length + errors.length  + blockedEntities.length === entities.length) {
+        if (lookupResults.length + errors.length + blockedEntities.length === entities.length) {
           if (numConnectionResets > 0 || numThrottled > 0) {
             log.warn(
               {
@@ -167,7 +167,7 @@ function doLookup(entities, options, cb) {
   }
 }
 
-function _processRequest(err, response, body, entityObj, options, cb) {
+function _processRequest (err, response, body, entityObj, options, cb) {
   if (err) {
     log.error({ err: err }, 'Request Error');
     cb(
@@ -292,7 +292,7 @@ function _processRequest(err, response, body, entityObj, options, cb) {
   });
 }
 
-function _lookupEntity(entityObj, options, cb) {
+function _lookupEntity (entityObj, options, cb) {
   log.trace('Lookup started on ' + entityObj.value);
   requestWithDefaults(
     {
@@ -339,7 +339,7 @@ let _createJsonErrorObject = function (msg, pointer, httpCode, code, title, meta
   return error;
 };
 
-function onMessage(payload, options, cb) {
+function onMessage (payload, options, cb) {
   doLookup([payload.entity], options, (err, lookupResults) => {
     if (err) {
       log.error({ err }, 'Error retrying lookup');
