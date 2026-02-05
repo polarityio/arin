@@ -1,0 +1,76 @@
+{
+  "root": {
+    "path": "",
+    "on_null": "return_empty"
+  },
+  "pipeline": [
+    {
+      "op": "copy",
+      "from": "orgHandle",
+      "to": "reduced_results.org_handle"
+    },
+    {
+      "op": "copy",
+      "from": "orgName",
+      "to": "reduced_results.org_name"
+    },
+    {
+      "op": "copy",
+      "from": "orgRef",
+      "to": "reduced_results.org_ref"
+    },
+    {
+      "op": "copy",
+      "from": "netBlockHandle",
+      "to": "reduced_results.netblock_handle"
+    },
+    {
+      "op": "copy",
+      "from": "netBlockName",
+      "to": "reduced_results.netblock_name"
+    },
+    {
+      "op": "copy",
+      "from": "netBlockCIDR",
+      "to": "reduced_results.netblock_cidr"
+    },
+    {
+      "op": "copy",
+      "from": "startAddr",
+      "to": "reduced_results.start_address"
+    },
+    {
+      "op": "copy",
+      "from": "endAddr",
+      "to": "reduced_results.end_address"
+    },
+    {
+      "op": "copy",
+      "from": "regDate",
+      "to": "reduced_results.registration_date"
+    },
+    {
+      "op": "copy",
+      "from": "upDate",
+      "to": "reduced_results.update_date"
+    },
+    {
+      "op": "copy",
+      "from": "parentHandle",
+      "to": "reduced_results.parent_handle"
+    },
+    {
+      "op": "copy",
+      "from": "parentName",
+      "to": "reduced_results.parent_name"
+    },
+    {
+      "op": "prune",
+      "strategy": "empty_values",
+      "target": "reduced_results"
+    }
+  ],
+  "output": {
+    "result": "$working.reduced_results"
+  }
+}

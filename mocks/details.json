@@ -1,0 +1,64 @@
+{
+  "allData": {
+    "net": {
+      "handle": {
+        "$": "NET-8-8-8-0-1"
+      },
+      "name": {
+        "$": "LVLT-GOGL-8-8-8"
+      },
+      "orgRef": {
+        "@handle": "GOGL",
+        "@name": "Google LLC",
+        "$": "https://whois.arin.net/rest/org/GOGL"
+      },
+      "parentNetRef": {
+        "@handle": "NET-8-0-0-0-1",
+        "@name": "LEVEL3",
+        "$": "https://whois.arin.net/rest/net/NET-8-0-0-0-1"
+      },
+      "netBlocks": {
+        "netBlock": {
+          "cidrLength": {
+            "$": "24"
+          },
+          "endAddress": {
+            "$": "8.8.8.255"
+          },
+          "startAddress": {
+            "$": "8.8.8.0"
+          },
+          "type": {
+            "$": "S"
+          }
+        }
+      },
+      "registrationDate": {
+        "$": "2014-03-14T00:00:00-04:00"
+      },
+      "ref": {
+        "$": "https://whois.arin.net/rest/net/NET-8-8-8-0-1"
+      },
+      "updateDate": {
+        "$": "2014-03-14T00:00:00-04:00"
+      },
+      "version": {
+        "$": "4"
+      }
+    }
+  },
+  "orgHandle": "GOGL",
+  "orgName": "Google LLC",
+  "orgRef": "https://whois.arin.net/rest/org/GOGL",
+  "netBlockHandle": "NET-8-8-8-0-1",
+  "netBlockName": "LVLT-GOGL-8-8-8",
+  "netBlockCIDR": "8.8.8.0/24",
+  "startAddr": "8.8.8.0",
+  "endAddr": "8.8.8.255",
+  "netBlockRef": "https://whois.arin.net/rest/net/NET-8-8-8-0-1",
+  "regDate": "2014-03-14T00:00:00-04:00",
+  "upDate": "2014-03-14T00:00:00-04:00",
+  "parentHandle": "NET-8-0-0-0-1",
+  "parentName": "LEVEL3",
+  "parentRef": "https://whois.arin.net/rest/net/NET-8-0-0-0-1"
+}
